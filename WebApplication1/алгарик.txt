@@ -1,0 +1,61 @@
+﻿(для ч/б)
+ШАГ 1. Изменение размеров изображения
+ШАГ 2. Подбор символа
+ШАГ 3. Матрицы цветности
+
+Brightness Matrix    Contrast Matrix      Saturation Matrix
+
+     R G B A W           R G B A W            R   G   B   A   W
+
+ R  [1 0 0 0 0]      R  [c 0 0 0 0]      R  [sr+s sr  sr  0   0]
+ G  [0 1 0 0 0]      G  [0 c 0 0 0]      G  [ sg sg+s sg  0   0]
+ B  [0 0 1 0 0]      B  [0 0 c 0 0]      B  [ sb  sb sb+s 0   0]
+ A  [0 0 0 1 0]      A  [0 0 0 1 0]      A  [ 0   0   0   1   0]
+ W  [b b b 0 1]      W  [t t t 0 1]      W  [ 0   0   0   0   1]
+
+ b = brightness      c = contrast         s  = saturation
+                     t = (1.0 - c) / 2.0  sr = (1 - s) * lumR
+ Legend                                   sg = (1 - s) * lumG
+ R = red                                  sb = (1 - s) * lumB
+ G = green
+ B = blue                                 lumR = 0.3086  or  0.2125
+ A = alpha (transparency)                 lumG = 0.6094  or  0.7154
+ W = white (always = 1)                   lumB = 0.0820  or  0.0721
+
+- The brightness matrix is a simple translation 
+  matrix on the RGB elements.
+
+- The contrast matrix is a scaling matrix on the RGB elements. 
+  The extra translation parameters in the contrast matrix is used 
+  for shifting the base color (when c = 0)from black to gray.
+
+- The saturation matrix re-adjust the RGB color distribution so 
+  that at s = 0, R = G = B = luminance (brightness in grayscale).
+
+     R G B A W            R G B A W             R   G   B   A   W
+
+ R  [1 0 0 0 0]       R  [c 0 0 0 0]       R  [sr+s sr  sr  0   0]
+ G  [0 1 0 0 0]       G  [0 c 0 0 0]       G  [ sg sg+s sg  0   0]
+ B  [0 0 1 0 0]    X  B  [0 0 c 0 0]    X  B  [ sb  sb sb+s 0   0]
+ A  [0 0 0 1 0]       A  [0 0 0 1 0]       A  [ 0   0   0   1   0]
+ W  [b b b 0 1]       W  [t t t 0 1]       W  [ 0   0   0   0   1]
+
+Brightness Matrix     Contrast Matrix          Saturation Matrix
+
+
+                        R      G      B      A      W
+
+                 R  [c(sr+s) c(sr)  c(sr)    0      0   ]
+                 G  [ c(sg) c(sg+s) c(sg)    0      0   ]
+         ===>    B  [ c(sb)  c(sb) c(sb+s)   0      0   ]
+                 A  [   0      0      0      1      0   ]
+                 W  [  t+b    t+b    t+b     0      1   ]
+
+                           Transformation Matrix
+
+ШАГ 4. Отображение
+
+(для цветной)
+ШАГ 1. Изменение размеров изображения
+ШАГ 2. Подбор символа
+ШАГ 3. Отображение
